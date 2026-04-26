@@ -1,0 +1,19 @@
+async function getFlight() {
+  const flight = document.getElementById("flight").value;
+
+  const res = await fetch(`/flight?flight=${flight}`);
+  const data = await res.json();
+
+  if (data.error) {
+    document.getElementById("result").innerHTML = data.error;
+    return;
+  }
+
+  const landing = new Date(data.landing).toLocaleTimeString();
+  const pickup = new Date(data.pickup).toLocaleTimeString();
+
+  document.getElementById("result").innerHTML = `
+    <p>Landing Time: ${landing}</p>
+    <p>Pickup Ready Time: ${pickup}</p>
+  `;
+}

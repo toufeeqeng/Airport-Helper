@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Airport Pickup Helper</title>
+</head>
+<body>
+  <h1>Airport Pickup Helper</h1>
+
+  <input type="text" id="flight" placeholder="Enter flight number" />
+  <button onclick="getFlight()">Check</button>
+
+  <div id="result"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

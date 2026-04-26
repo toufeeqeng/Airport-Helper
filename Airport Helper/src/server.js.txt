@@ -1,0 +1,40 @@
+const express = require("express");
+const fetch = require("node-fetch");
+const app = express();
+
+app.use(express.static("public"));
+
+const PORT = process.env.PORT || 3000;
+
+const FLIGHT_API_KEY = process.env.FLIGHT_API_KEY;
+
+app.get("/flight", async (req, res) => {
+  const flight = req.query.flight;
+
+  try {
+    const response = await fetch(
+      `http://api.aviationstack.com/v1/flights?access_key=${FLIGHT_API_KEY}&flight_iata=${flight}`
+    );
+    const data = await response.json();
+
+    if (!data.data || data.data.length === 0) {
+      return res.json({ error: "Flight not found" });
+    }
+
+    const flightData = data.data[0];
+
+    const landingTime = new Date(flightData.arrival.estimated);
+
+    const pickupTime = new Date(landingTime.getTime() + 25 * 60000);
+
+    res.json({
+      landing: landingTime,
+      pickup: pickupTime
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: "Error fetching flight data" });
+  }
+});
+
+app.listen(PORT, () => console.log("Server running"));
